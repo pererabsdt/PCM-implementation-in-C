@@ -29,15 +29,24 @@ void run(asignal* inputsignal) {
     inputsignal->duration = duration;
 
     int levels = pow(2, encoderbits);
-    int array_size = duration / interval + 2;
+    int array_size = (duration / interval) + 2;
 
     float sampleArray[array_size];
     sampler(sampleArray, interval, *inputsignal);
+    for (int i = 1; i < array_size; ++i) {
+        printf("%f   ", sampleArray[i]);
+    }
+    printf("\n");
 
     int pcmpulsesArray[array_size];
     quantizer(sampleArray, pcmpulsesArray, levels, A);
+    for (int i = 1; i < array_size; ++i) {
+        printf("%d   ", pcmpulsesArray[i]);
+    }
+    printf("\n");
 
-    int number_of_bits = 2 * (array_size - 1);
+
+    int number_of_bits = encoderbits * (array_size - 1);
     int dsignalArray[number_of_bits + 1];
 
     encoder(pcmpulsesArray, dsignalArray, encoderbits);
@@ -45,6 +54,7 @@ void run(asignal* inputsignal) {
     for (int i = 1; i < number_of_bits + 1; ++i) {
         printf("%d", dsignalArray[i]);
     }
+    printf("\n");
 }
 
 
