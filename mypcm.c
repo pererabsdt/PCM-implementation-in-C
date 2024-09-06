@@ -26,29 +26,26 @@ void sampler(float *samples, int interval, asignal signal) {
     int number_of_samples = signal.duration / interval;
     int array_size = number_of_samples + 2;
     samples[0] = (float)array_size;
-    for (int i = 1; i <= number_of_samples + 1; ++i) {
-        samples[i] = analog_signal_generator(signal, interval * i);
+    for (int i = 1; i < array_size; ++i) {
+        samples[i] = analog_signal_generator(signal, interval * (i-1));
     }
 }
 
 void quantizer(float *samples, int *pcmpulses, int levels, float A) {
-    while (*samples != 2 * A ) {
-        int level = floor((*(samples++) + A) * levels / (2 * A));
-        *(pcmpulses++) = level;
-    }
-//    *pcmpulses = 2 * levels;
+    int array_size = (int)samples[0];
+    pcmpulses[0] = array_size;
 
+    for (int i = 1; i < array_size; ++i) {
+        int quantization_level = floor((samples[i] + A) * levels / (2 * A));
+        pcmpulses[i] = quantization_level;
+    }
 }
 
 void encoder(int *pcmpulses, int *dsignal, int encoderbits) {
-    int levels = pow(2, encoderbits);
-    while (*pcmpulses != 2 * levels) {
-        int value = *pcmpulses;
-        int binary_value = decimal_to_binary(value);
-        *(dsignal++) = binary_value;
-        pcmpulses++;
+    int number_of_iterations = pcmpulses[0] - 1;
+    for (int i = 0; i <= number_of_iterations; ++i) {
+        int binary_value = decimal_to_binary(pcmpulses[i + 1]);
     }
-
 }
 
 int decimal_to_binary(int n) {
