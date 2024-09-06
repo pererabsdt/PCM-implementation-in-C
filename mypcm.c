@@ -40,6 +40,13 @@ void quantizer(float *samples, int *pcmpulses, int levels, float A) {
 }
 
 void encoder(int *pcmpulses, int *dsignal, int encoderbits) {
+    int levels = pow(2, encoderbits);
+    while (*pcmpulses != 2 * levels) {
+        int value = *pcmpulses;
+        int binary_value = decimal_to_binary(value);
+        *(dsignal++) = binary_value;
+        pcmpulses++;
+    }
 
 }
 
