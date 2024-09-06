@@ -15,7 +15,7 @@ int main() {
     asignal * inputsignal = (asignal *) malloc(sizeof(asignal));
     run(inputsignal);
 
-    //call any other function here
+    call any other function here
 
     free(inputsignal);
     return 0;

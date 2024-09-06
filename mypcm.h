@@ -17,4 +17,3 @@ void sampler(float *samples, int interval, asignal signal);
 void quantizer1(float *samples, int *pcmpulses, int levels);
 void quantizer(float *samples, int *pcmpulses, int levels, float A);
 void encoder(int *pcmpulses, int *dsignal, int encoderbits);
-
