@@ -9,7 +9,7 @@
 #include "mypcm.h" // do not modify this file
 
 // put your function prototypes for additional helper functions below:
-int decimal_to_binary(int n);
+void decimal_to_binary(int n, int encoderbits, char *binary_str);
 
 
 // implementation
@@ -41,40 +41,34 @@ void quantizer(float *samples, int *pcmpulses, int levels, float A) {
     }
 }
 
-void encoder(int *pcmpulses, int *dsignal, int encoderbits) {
-    int number_of_iterations = pcmpulses[0] - 1;
-    for (int i = 0; i <= number_of_iterations; ++i) {
-        int binary_value = decimal_to_binary(pcmpulses[i + 1]);
+void decimal_to_binary(int n, int encoderbits, char *binary_str) {
+    for (int i = encoderbits - 1; i >= 0; --i) {
+        binary_str[i] = (n & 1) ? '1' : '0';
+        n >>= 1;
     }
+    binary_str[encoderbits] = '\0';
 }
 
-int decimal_to_binary(int n) {
-    char binaryStr[32];
-    int i = 0;
+void encoder(int *pcmpulses, int *dsignal, int encoderbits) {
+    int num_elements = pcmpulses[0];
+    int binary_str_length = (num_elements - 1) * encoderbits;
 
-    if (n == 0) {
-        return 0;
+    char *binary_str = (char *)malloc(binary_str_length + 1);
+
+    binary_str[0] = '\0';
+
+    for (int i = 1; i < num_elements; ++i) {
+        char temp_binary[encoderbits + 1];
+        decimal_to_binary(pcmpulses[i], encoderbits, temp_binary);
+        strcat(binary_str, temp_binary);
     }
 
-    while (n > 0) {
-        binaryStr[i] = (n % 2) + '0';
-        n = n / 2;
-        i++;
+    int count = 0;
+    for (int i = 0; i < binary_str_length; ++i) {
+        dsignal[i + 1] = binary_str[i] - '0';
+        count++;
     }
-    binaryStr[i] = '\0';
+    dsignal[0] = count;
 
-    // Reverse the string because binary digits were added in reverse order
-    int len = strlen(binaryStr);
-    for (int j = 0; j < len / 2; j++) {
-        char temp = binaryStr[j];
-        binaryStr[j] = binaryStr[len - j - 1];
-        binaryStr[len - j - 1] = temp;
-    }
-
-    int binaryInt = 0;
-    for (int k = 0; k < len; k++) {
-        binaryInt = binaryInt * 10 + (binaryStr[k] - '0');
-    }
-
-    return binaryInt;
+    free(binary_str);
 }
