@@ -19,10 +19,14 @@ int main() {
 }
 
 void run(asignal* inputsignal) {
+    // Variables to store the inputs
     float A, omega, sigma;
     int duration, interval, encoderbits;
+
+    // Get inputs from user
     scanf("%f %f %f %d %d %d", &A, &omega, &sigma, &duration, &interval, &encoderbits);
 
+    // Assign values to the fields of the inputsignal instance of the asignal struct
     inputsignal->A = A;
     inputsignal->sigma = sigma;
     inputsignal->omega = omega;
@@ -33,28 +37,17 @@ void run(asignal* inputsignal) {
 
     float sampleArray[array_size];
     sampler(sampleArray, interval, *inputsignal);
-    for (int i = 1; i < array_size; ++i) {
-        printf("%f   ", sampleArray[i]);
-    }
-    printf("\n");
 
     int pcmpulsesArray[array_size];
     quantizer(sampleArray, pcmpulsesArray, levels, A);
-    for (int i = 1; i < array_size; ++i) {
-        printf("%d   ", pcmpulsesArray[i]);
-    }
-    printf("\n");
-
 
     int number_of_bits = encoderbits * (array_size - 1);
     int dsignalArray[number_of_bits + 1];
-
     encoder(pcmpulsesArray, dsignalArray, encoderbits);
 
     for (int i = 1; i < number_of_bits + 1; ++i) {
         printf("%d", dsignalArray[i]);
     }
-    printf("\n");
 }
 
 

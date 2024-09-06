@@ -25,7 +25,11 @@ float analog_signal_generator(asignal signal, int t) {
 void sampler(float *samples, int interval, asignal signal) {
     int number_of_samples = signal.duration / interval;
     int array_size = number_of_samples + 2;
+
+    // Store the size of the array as the first function in order to be used in other functions.
     samples[0] = (float)array_size;
+
+    // Start the loop with index 1 since index 0 contains the array size.
     for (int i = 1; i < array_size; ++i) {
         samples[i] = analog_signal_generator(signal, interval * (i-1));
     }
@@ -33,6 +37,8 @@ void sampler(float *samples, int interval, asignal signal) {
 
 void quantizer(float *samples, int *pcmpulses, int levels, float A) {
     int array_size = (int)samples[0];
+
+    // Store the size of the array as the first function in order to be used in other functions
     pcmpulses[0] = array_size;
 
     for (int i = 1; i < array_size; ++i) {
@@ -41,9 +47,14 @@ void quantizer(float *samples, int *pcmpulses, int levels, float A) {
     }
 }
 
+// Helper function to convert decimal values to binary
 void decimal_to_binary(int n, int encoderbits, char *binary_str) {
     for (int i = encoderbits - 1; i >= 0; --i) {
-        binary_str[i] = (n & 1) ? '1' : '0';
+        if (n & 1) {
+            binary_str[i] = '1';
+        } else {
+            binary_str[i] = '0';
+        }
         n >>= 1;
     }
     binary_str[encoderbits] = '\0';
@@ -51,8 +62,9 @@ void decimal_to_binary(int n, int encoderbits, char *binary_str) {
 
 void encoder(int *pcmpulses, int *dsignal, int encoderbits) {
     int num_elements = pcmpulses[0];
-    int binary_str_length = (num_elements - 1) * encoderbits;
 
+    // Store the encoded binary value in a string(char array) initially
+    int binary_str_length = (num_elements - 1) * encoderbits;
     char *binary_str = (char *)malloc(binary_str_length + 1);
 
     binary_str[0] = '\0';
@@ -63,12 +75,18 @@ void encoder(int *pcmpulses, int *dsignal, int encoderbits) {
         strcat(binary_str, temp_binary);
     }
 
+    // Count variable to store the size of the dsignal array
     int count = 0;
+
+    // Convert the char in the char array to int and store in dsignal array
     for (int i = 0; i < binary_str_length; ++i) {
         dsignal[i + 1] = binary_str[i] - '0';
         count++;
     }
+
+    // Store the size of the array as the first element in order to be used to print values in the run function
     dsignal[0] = count;
 
+    // Free the memory allocated for the char array
     free(binary_str);
 }
