@@ -1,0 +1,13 @@
+# Ignore build directories
+cmake-build-debug/
+
+# Ignore IDE settings (for JetBrains IDEs)
+.idea/
+
+# Ignore CMake generated Makefile
+Makefile
+
+# Optional: Ignore CMake cache files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
