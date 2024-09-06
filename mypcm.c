@@ -24,18 +24,19 @@ float analog_signal_generator(asignal signal, int t) {
 
 void sampler(float *samples, int interval, asignal signal) {
     int number_of_samples = signal.duration / interval;
-    for (int i = 0; i <= number_of_samples; ++i) {
+    int array_size = number_of_samples + 2;
+    samples[0] = (float)array_size;
+    for (int i = 1; i <= number_of_samples + 1; ++i) {
         samples[i] = analog_signal_generator(signal, interval * i);
     }
-    *samples = 2 * signal.A;
 }
 
 void quantizer(float *samples, int *pcmpulses, int levels, float A) {
     while (*samples != 2 * A ) {
-        int level = floor((*(samples++) + A) * levels / 2 * A);
+        int level = floor((*(samples++) + A) * levels / (2 * A));
         *(pcmpulses++) = level;
     }
-    *pcmpulses = 2 * levels;
+//    *pcmpulses = 2 * levels;
 
 }
 
