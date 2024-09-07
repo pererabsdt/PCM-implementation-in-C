@@ -45,7 +45,7 @@ void run(asignal* inputsignal) {
     int dsignalArray[number_of_bits + 1];
     encoder(pcmpulsesArray, dsignalArray, encoderbits);
 
-    for (int i = 1; i < number_of_bits + 1; ++i) {
+    for (int i = 0; i < number_of_bits; ++i) {
         printf("%d", dsignalArray[i]);
     }
 }

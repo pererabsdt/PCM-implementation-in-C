@@ -78,7 +78,7 @@ void encoder(int *pcmpulses, int *dsignal, int encoderbits) {
 
     // Convert the char in the char array to int and store in dsignal array
     for (int i = 0; i < binary_str_length; ++i) {
-        dsignal[i + 1] = binary_str[i] - '0';
+        dsignal[i] = binary_str[i] - '0';
     }
 
 
