@@ -46,4 +46,3 @@ The program outputs the final PCM encoded binary stream to stdout.
 ---
 
 This project was completed as a lab exercise for the Data Communication and Networking module in Semester 3 of the Computer Science and Engineering at University of Moratuwa. 
-Please refer to your institution's guidelines on academic integrity and code sharing before using any code from this repository in your own assignments or projects.
