@@ -75,17 +75,12 @@ void encoder(int *pcmpulses, int *dsignal, int encoderbits) {
         strcat(binary_str, temp_binary);
     }
 
-    // Count variable to store the size of the dsignal array
-    int count = 0;
 
     // Convert the char in the char array to int and store in dsignal array
     for (int i = 0; i < binary_str_length; ++i) {
         dsignal[i + 1] = binary_str[i] - '0';
-        count++;
     }
 
-    // Store the size of the array as the first element in order to be used to print values in the run function
-    dsignal[0] = count;
 
     // Free the memory allocated for the char array
     free(binary_str);
